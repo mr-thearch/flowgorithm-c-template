@@ -11,7 +11,7 @@ Keywords       = auto, break, case, char, const, continue, default, do, double
                = _Static_assert, _Thread_local, bool, true, false
 
 ; toInt / toReal / toString sono funzioni di supporto definite in fondo al programma
-Conflicts      = toInt, toReal, toString, inputReal, inputInt, inputBool, inputString
+Conflicts      = toInt, toReal, toString, toChar, inputValue, inputString, inputBool
 Case Sensitive = true
 Options        =             
 
@@ -91,25 +91,29 @@ Text         = strcmp({1}, {2}) != 0        |  string-string
 Precedence   = 4            
 Needed 1     = 5
 Needed 2     = 5
-Text         = {1} < {2} 
+Text         = strcmp({1}, {2}) < 0         | string-string
+             = {1} < {2}                    | ~string-string
 
 [Less Equal Than]
 Precedence   = 4            
 Needed 1     = 5
 Needed 2     = 5
-Text         = {1} <= {2} 
+Text         = strcmp({1}, {2}) <= 0        | string-string
+             = {1} <= {2}                   | ~string-string
 
 [Greater Than]
 Precedence   = 4            
 Needed 1     = 5
 Needed 2     = 5
-Text         = {1} > {2} 
+Text         = strcmp({1}, {2}) > 0         | string-string
+             = {1} > {2}                    | ~string-string
 
 [Greater Equal Than]
 Precedence   = 4            
 Needed 1     = 5
 Needed 2     = 5
-Text         = {1} >= {2} 
+Text         = strcmp({1}, {2}) >= 0        | string-string
+             = {1} >= {2}                   | ~string-string
 
 ; Per semplicità, si usa l’operatore + anche per le stringhe.
 ; Se si vorrà una gestione più raffinata, qui si potrà introdurre
@@ -304,6 +308,11 @@ Precedence = 100
 Needed 1   = 0 
 Text       = toString({1})
 
+[ToChar]
+Precedence = 100
+Needed 1   = 100
+Text       = toChar((int)({1}))
+
 ; =======================================================
 ; Chiamata di funzione
 ; =======================================================
@@ -342,6 +351,7 @@ Text      = // Flowgorithm non genera codice per turtle graphics in C.   | turtl
           = char* inputString(void);
 		  = bool inputBool(void);
           = char* stringConcat(const char* s1, const char* s2);
+          = char* toChar(int code);
           = -->HEADERS 
 		  =
           = -->MAIN
@@ -476,7 +486,17 @@ Text      = // Flowgorithm non genera codice per turtle graphics in C.   | turtl
           =         fprintf(stderr, "Valore booleano non valido. Inserire true o false.\n"); | | 2
           =     }                                                     | | 1
           = }
-
+          =
+          = char* toChar(int code) {{
+          =     char* result = (char*)malloc(2);                                  | | 1
+          =     if (result == NULL) {{                                            | | 1
+          =         fprintf(stderr, "Errore: memoria insufficiente in toChar.\n");| | 2
+          =         exit(EXIT_FAILURE);                                           | | 2
+          =     }                                                                 | | 1
+          =     result[0] = (char)code;                                           | | 1
+          =     result[1] = '\0';                                                 | | 1
+          =     return result;                                                    | | 1
+          = }
 
 [Main]
 Text      = int main(void) {{

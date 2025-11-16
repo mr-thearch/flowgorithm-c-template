@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="SelectionSort"/>
+        <attribute name="authors" value="chrom"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-11-16 07:04:19 PM"/>
+        <attribute name="created" value="Y2hyb207UEMtTUFVUklaSU87MjAyNS0xMS0xNjsiMDM6MjA6NDEgIjsyNTM2"/>
+        <attribute name="edited" value="Y2hyb207UEMtTUFVUklaSU87MjAyNS0xMS0xNjsiMDY6MjA6MDYgIjsxODsyNzA0"/>
+        <attribute name="edited" value="bXJvbWFubztUSElOS1BBRC0yNzsyMDI1LTExLTE2OzA3OjA0OjE5IFBNOzg7MjkwNA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="i, n, sortType" type="Integer" array="False" size=""/>
+            <declare name="randomArray" type="Boolean" array="False" size=""/>
+            <output expression="&quot;Insert the number of items should be sorted&quot;" newline="True"/>
+            <input variable="n"/>
+            <declare name="A" type="Integer" array="True" size="n"/>
+            <output expression="&quot;Do you prefer random values? (true\false)&quot;" newline="True"/>
+            <input variable="randomArray"/>
+            <output expression="&quot;Choose a sort algorithm (1\2\3): &quot; &amp; ToChar(13) &amp; ToChar(10) &amp; &quot;1) Selection Sort&quot; &amp; ToChar(13) &amp; ToChar(10) &amp; &quot;2) Bubble Sort&quot; &amp; ToChar(13) &amp; ToChar(10) &amp; &quot;3) Insertion Sort&quot;" newline="True"/>
+            <input variable="sortType"/>
+            <call expression="FillArray(a, n, randomArray)"/>
+            <call expression="PrintArray(A,n, &quot;Unsorted array:&quot;)"/>
+            <if expression="sortType == 1">
+                <then>
+                    <call expression="SelectionSort(A,n)"/>
+                </then>
+                <else>
+                    <if expression="sortType == 2">
+                        <then>
+                            <call expression="BubbleSort(A,n)"/>
+                        </then>
+                        <else>
+                            <call expression="InsertionSort(A,n)"/>
+                        </else>
+                    </if>
+                </else>
+            </if>
+            <call expression="PrintArray(A,n, &quot;Sorted array:&quot;)"/>
+        </body>
+    </function>
+    <function name="BubbleSort" type="None" variable="">
+        <parameters>
+            <parameter name="A" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="scambio" type="Boolean" array="False" size=""/>
+            <declare name="i, j, temp" type="Integer" array="False" size=""/>
+            <assign variable="i" expression="0"/>
+            <assign variable="scambio" expression="true"/>
+            <while expression="(scambio== true) &amp;&amp; (i&lt;(n-1))">
+                <assign variable="scambio" expression="false"/>
+                <for variable="j" start="0" end="n-2" direction="inc" step="1">
+                    <if expression="A[j]&gt;A[j+1]">
+                        <then>
+                            <assign variable="temp" expression="A[j]"/>
+                            <assign variable="A[j]" expression="A[j+1]"/>
+                            <assign variable="A[j+1]" expression="temp"/>
+                            <assign variable="scambio" expression="true"/>
+                        </then>
+                        <else/>
+                    </if>
+                </for>
+                <assign variable="i" expression="i+1"/>
+            </while>
+        </body>
+    </function>
+    <function name="FillArray" type="None" variable="">
+        <parameters>
+            <parameter name="a" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+            <parameter name="randomArray" type="Boolean" array="False"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <for variable="i" start="0" end="n-1" direction="inc" step="1">
+                <if expression="randomArray">
+                    <then>
+                        <assign variable="A[i]" expression="random(1000)"/>
+                    </then>
+                    <else>
+                        <output expression="&quot;Insert the number at position&quot; &amp; ToString(i+1)" newline="True"/>
+                        <input variable="A[i]"/>
+                    </else>
+                </if>
+            </for>
+        </body>
+    </function>
+    <function name="InsertionSort" type="None" variable="">
+        <parameters>
+            <parameter name="A" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="i, j, elem" type="Integer" array="False" size=""/>
+            <declare name="continua" type="Boolean" array="False" size=""/>
+            <for variable="j" start="1" end="n-1" direction="inc" step="1">
+                <assign variable="continua" expression="true"/>
+                <assign variable="elem" expression="A[j]"/>
+                <assign variable="i" expression="j-1"/>
+                <while expression="(continua == true) &amp;&amp; (i&gt;=0)">
+                    <if expression="(A[i]&gt;elem)">
+                        <then>
+                            <assign variable="A[i+1]" expression="A[i]"/>
+                            <assign variable="i" expression="i-1"/>
+                        </then>
+                        <else>
+                            <assign variable="continua" expression="false"/>
+                        </else>
+                    </if>
+                </while>
+                <assign variable="A[i+1]" expression="elem"/>
+            </for>
+        </body>
+    </function>
+    <function name="PrintArray" type="None" variable="">
+        <parameters>
+            <parameter name="a" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+            <parameter name="msg" type="String" array="False"/>
+        </parameters>
+        <body>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <if expression="msg != &quot;&quot;">
+                <then>
+                    <output expression="msg &amp; &quot; &quot;" newline="False"/>
+                </then>
+                <else/>
+            </if>
+            <for variable="i" start="0" end="n-1" direction="inc" step="1">
+                <output expression="ToString(a[i]) &amp; &quot; &quot;" newline="False"/>
+            </for>
+            <output expression="&quot; &quot;" newline="True"/>
+        </body>
+    </function>
+    <function name="SelectionSort" type="None" variable="">
+        <parameters>
+            <parameter name="A" type="Integer" array="True"/>
+            <parameter name="n" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="i, j, min, temp" type="Integer" array="False" size=""/>
+            <for variable="i" start="0" end="n-2" direction="inc" step="1">
+                <assign variable="min" expression="i"/>
+                <for variable="j" start="i+1" end="n-1" direction="inc" step="1">
+                    <if expression="A[j]&lt;A[min]">
+                        <then>
+                            <assign variable="min" expression="j"/>
+                        </then>
+                        <else/>
+                    </if>
+                </for>
+                <assign variable="temp" expression="A[min]"/>
+                <assign variable="A[min]" expression="A[i]"/>
+                <assign variable="A[i]" expression="temp"/>
+            </for>
+        </body>
+    </function>
+</flowgorithm>
