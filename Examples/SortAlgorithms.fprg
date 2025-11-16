@@ -4,23 +4,20 @@
         <attribute name="name" value="SelectionSort"/>
         <attribute name="authors" value="chrom"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-11-16 09:06:23 PM"/>
+        <attribute name="saved" value="2025-11-16 09:22:42 PM"/>
         <attribute name="created" value="Y2hyb207UEMtTUFVUklaSU87MjAyNS0xMS0xNjsiMDM6MjA6NDEgIjsyNTM2"/>
         <attribute name="edited" value="Y2hyb207UEMtTUFVUklaSU87MjAyNS0xMS0xNjsiMDY6MjA6MDYgIjsxODsyNzA0"/>
-        <attribute name="edited" value="bXJvbWFubztUSElOS1BBRC0yNzsyMDI1LTExLTE2OzA5OjA2OjIzIFBNOzk7MjkwNA=="/>
+        <attribute name="edited" value="bXJvbWFubztUSElOS1BBRC0yNzsyMDI1LTExLTE2OzA5OjIyOjQyIFBNOzExOzI5NDQ="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
         <body>
             <declare name="i, n, sortType" type="Integer" array="False" size=""/>
             <declare name="randomArray" type="Boolean" array="False" size=""/>
-            <output expression="&quot;Insert the number of items should be sorted&quot;" newline="True"/>
-            <input variable="n"/>
+            <assign variable="n" expression="GetArrayDimension()"/>
             <declare name="A" type="Integer" array="True" size="n"/>
-            <output expression="&quot;Do you prefer random values? (true\false)&quot;" newline="True"/>
-            <input variable="randomArray"/>
-            <output expression="&quot;Choose a sort algorithm (1\2\3): &quot; &amp; ToChar(13) &amp; ToChar(10) &amp; &quot;1) Selection Sort&quot; &amp; ToChar(13) &amp; ToChar(10) &amp; &quot;2) Bubble Sort&quot; &amp; ToChar(13) &amp; ToChar(10) &amp; &quot;3) Insertion Sort&quot;" newline="True"/>
-            <input variable="sortType"/>
+            <assign variable="randomArray" expression="ChooseRandomArray()"/>
+            <assign variable="sortType" expression="GetSortType()"/>
             <call expression="FillArray(a, n, randomArray)"/>
             <call expression="PrintArray(A,n, &quot;Unsorted array:&quot;)"/>
             <if expression="sortType == 1">
@@ -68,6 +65,14 @@
             </while>
         </body>
     </function>
+    <function name="ChooseRandomArray" type="Boolean" variable="isRandom">
+        <parameters/>
+        <body>
+            <declare name="isRandom" type="Boolean" array="False" size=""/>
+            <output expression="&quot;Do you prefer random values? (true\false)&quot;" newline="True"/>
+            <input variable="isRandom"/>
+        </body>
+    </function>
     <function name="FillArray" type="None" variable="">
         <parameters>
             <parameter name="a" type="Integer" array="True"/>
@@ -87,6 +92,22 @@
                     </else>
                 </if>
             </for>
+        </body>
+    </function>
+    <function name="GetArrayDimension" type="Integer" variable="numItems">
+        <parameters/>
+        <body>
+            <declare name="numItems" type="Integer" array="False" size=""/>
+            <output expression="&quot;Insert the number of items should be sorted&quot;" newline="True"/>
+            <input variable="numItems"/>
+        </body>
+    </function>
+    <function name="GetSortType" type="Integer" variable="sortType">
+        <parameters/>
+        <body>
+            <declare name="sortType" type="Integer" array="False" size=""/>
+            <output expression="&quot;Choose a sort algorithm (1\2\3): &quot; &amp; ToChar(13) &amp; ToChar(10) &amp; &quot;1) Selection Sort&quot; &amp; ToChar(13) &amp; ToChar(10) &amp; &quot;2) Bubble Sort&quot; &amp; ToChar(13) &amp; ToChar(10) &amp; &quot;3) Insertion Sort&quot;" newline="True"/>
+            <input variable="sortType"/>
         </body>
     </function>
     <function name="InsertionSort" type="None" variable="">
