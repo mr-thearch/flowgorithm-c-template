@@ -65,7 +65,7 @@ Text       = {Name}               | ~subscript
 Precedence   = 1
 Needed 1     = 1
 Needed 2     = 2
-Text         = {1} || {2}
+Text         = {1} {pipe}{pipe} {2}
 
 [And]
 Precedence   = 2
@@ -74,16 +74,18 @@ Needed 2     = 3
 Text         = {1} && {2}
 
 [Equals]
-Precedence   = 3               
+Precedence   = 3
 Needed 1     = 4 
 Needed 2     = 4 
-Text         = {1} == {2} 
+Text         = strcmp({1}, {2}) == 0        |  string-string
+             = {1} == {2}                   |  ~string-string
 
 [Not Equals]
-Precedence   = 3               
+Precedence   = 3
 Needed 1     = 4 
 Needed 2     = 4 
-Text         = {1} != {2} 
+Text         = strcmp({1}, {2}) != 0        |  string-string
+             = {1} != {2}                   |  ~string-string
              
 [Less Than]
 Precedence   = 4            
