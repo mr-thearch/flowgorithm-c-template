@@ -11,7 +11,7 @@ Keywords       = auto, break, case, char, const, continue, default, do, double
                = _Static_assert, _Thread_local, bool, true, false
 
 ; toInt / toReal / toString sono funzioni di supporto definite in fondo al programma
-Conflicts      = toInt, toReal, toString, toChar, inputValue, inputString, inputBool
+Conflicts      = toInt, toReal, toString, toChar, inputValue, inputString, inputBool, intToString, realToString, boolToString
 Case Sensitive = true
 Options        =             
 
@@ -123,7 +123,22 @@ Text         = strcmp({1}, {2}) >= 0        | string-string
 Precedence   = 5
 Needed 1     = 5 
 Needed 2     = 6
-Text         = stringConcat({1}, {2})
+Text         = stringConcat({1}, {2})                               | string-string
+             = stringConcat({1}, intToString({2}))                  | string-integer
+             = stringConcat({1}, realToString({2}))                 | string-real
+             = stringConcat({1}, boolToString({2}))                 | string-boolean
+             = stringConcat(intToString({1}), {2})                  | integer-string
+             = stringConcat(intToString({1}), intToString({2}))     | integer-integer
+             = stringConcat(intToString({1}), realToString({2}))    | integer-real
+             = stringConcat(intToString({1}), boolToString({2}))    | integer-boolean
+             = stringConcat(realToString({1}), {2})                 | real-string
+             = stringConcat(realToString({1}), intToString({2}))    | real-integer
+             = stringConcat(realToString({1}), realToString({2}))   | real-real
+             = stringConcat(realToString({1}), boolToString({2}))   | real-boolean
+             = stringConcat({1}, {2})                               | boolean-string
+             = stringConcat(boolToString({1}), intToString({2}))    | boolean-integer
+             = stringConcat(boolToString({1}), realToString({2}))   | boolean-real
+             = stringConcat(boolToString({1}), boolToString({2}))   | boolean-boolean
 
 [Add]
 Type         = real         | ~integer-integer
@@ -132,7 +147,7 @@ Type         = real         | ~integer-integer
 Precedence   = 5
 Needed 1     = 5
 Needed 2     = 6
-Text         = {1} + {2}
+Text         = ({1} + {2})
 
 [Subtract]
 Type         = real         | ~integer-integer
@@ -141,7 +156,7 @@ Type         = real         | ~integer-integer
 Precedence   = 5
 Needed 1     = 5
 Needed 2     = 6
-Text         = {1} - {2}
+Text         = ({1} - {2})
 
 [Multiply]
 Type         = real         | ~integer-integer
@@ -150,7 +165,7 @@ Type         = real         | ~integer-integer
 Precedence   = 6
 Needed 1     = 6
 Needed 2     = 7
-Text         = {1} * {2}
+Text         = ({1} * {2})
 
 [Divide]
 Type         = real
@@ -158,13 +173,13 @@ Precedence   = 6
 Needed 1     = 6            
 Needed 2     = 7
 Cast 1       = real         | integer-integer
-Text         = {1} / {2} 
+Text         = ({1} / {2}) 
              
 [Modulus]
 Precedence   = 6
 Needed 1     = 6
 Needed 2     = 7
-Text         = {1} % {2}
+Text         = ({1} % {2})
 
 [Power]
 Type         = real
@@ -352,6 +367,9 @@ Text      = // Flowgorithm non genera codice per turtle graphics in C.   | turtl
 		  = bool inputBool(void);
           = char* stringConcat(const char* s1, const char* s2);
           = char* toChar(int code);
+          = char* intToString(int value);
+          = char* realToString(double value);
+          = char* boolToString(bool value);
           = -->HEADERS 
 		  =
           = -->MAIN
@@ -497,6 +515,52 @@ Text      = // Flowgorithm non genera codice per turtle graphics in C.   | turtl
           =     result[1] = '\0';                                                 | | 1
           =     return result;                                                    | | 1
           = }
+          =
+          = char* intToString(int value) {{
+          =     char buffer[32];                                              | | 1
+          =     int len = snprintf(buffer, sizeof(buffer), "%d", value);      | | 1
+          =     if (len < 0) {{                                               | | 1
+          =         fprintf(stderr, "Errore in intToString.\n");              | | 2
+          =         exit(EXIT_FAILURE);                                       | | 2
+          =     }                                                             | | 1
+          =     char* result = (char*)malloc((size_t)len + 1);                | | 1
+          =     if (result == NULL) {{                                        | | 1
+          =         fprintf(stderr, "Errore: memoria insufficiente in intToString.\n"); | | 2
+          =         exit(EXIT_FAILURE);                                       | | 2
+          =     }                                                             | | 1
+          =     memcpy(result, buffer, (size_t)len + 1);                      | | 1
+          =     return result;                                                | | 1
+          = }
+          =
+          = char* realToString(double value) {{
+          =     char buffer[64];                                              | | 1
+          =     int len = snprintf(buffer, sizeof(buffer), "%g", value);      | | 1
+          =     if (len < 0) {{                                               | | 1
+          =         fprintf(stderr, "Errore in realToString.\n");             | | 2
+          =         exit(EXIT_FAILURE);                                       | | 2
+          =     }                                                             | | 1
+          =     char* result = (char*)malloc((size_t)len + 1);                | | 1
+          =     if (result == NULL) {{                                        | | 1
+          =         fprintf(stderr, "Errore: memoria insufficiente in realToString.\n"); | | 2
+          =         exit(EXIT_FAILURE);                                       | | 2
+          =     }                                                             | | 1
+          =     memcpy(result, buffer, (size_t)len + 1);                      | | 1
+          =     return result;                                                | | 1
+          = }
+          =
+          = char* boolToString(bool value) {{
+          =     const char* src = value ? "true" : "false";                   | | 1
+          =     size_t len = strlen(src);                                     | | 1
+          =     char* result = (char*)malloc(len + 1);                        | | 1
+          =     if (result == NULL) {{                                        | | 1
+          =         fprintf(stderr, "Errore: memoria insufficiente in boolToString.\n"); | | 2
+          =         exit(EXIT_FAILURE);                                       | | 2
+          =     }                                                             | | 1
+          =     memcpy(result, src, len + 1);                                 | | 1
+          =     return result;                                                | | 1
+          = }
+
+
 
 [Main]
 Text      = int main(void) {{

@@ -122,13 +122,14 @@ This limitation reflects the true behaviour of the C language and helps students
 
 ## Repository structure
 
+```
 flowgorithm-c-template/
 │
 ├── C.fpgt                # The actual Flowgorithm language template for C
 ├── Examples/             # Flowgorithm sample files + generated C output
 ├── README.md             # Documentation (this file)
 └── LICENSE               # Open-source license
-
+```
 
 ## Contributing
 

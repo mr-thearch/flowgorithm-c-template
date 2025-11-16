@@ -4,10 +4,10 @@
         <attribute name="name" value="SelectionSort"/>
         <attribute name="authors" value="chrom"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2025-11-16 07:04:19 PM"/>
+        <attribute name="saved" value="2025-11-16 09:06:23 PM"/>
         <attribute name="created" value="Y2hyb207UEMtTUFVUklaSU87MjAyNS0xMS0xNjsiMDM6MjA6NDEgIjsyNTM2"/>
         <attribute name="edited" value="Y2hyb207UEMtTUFVUklaSU87MjAyNS0xMS0xNjsiMDY6MjA6MDYgIjsxODsyNzA0"/>
-        <attribute name="edited" value="bXJvbWFubztUSElOS1BBRC0yNzsyMDI1LTExLTE2OzA3OjA0OjE5IFBNOzg7MjkwNA=="/>
+        <attribute name="edited" value="bXJvbWFubztUSElOS1BBRC0yNzsyMDI1LTExLTE2OzA5OjA2OjIzIFBNOzk7MjkwNA=="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -131,7 +131,7 @@
                 <else/>
             </if>
             <for variable="i" start="0" end="n-1" direction="inc" step="1">
-                <output expression="ToString(a[i]) &amp; &quot; &quot;" newline="False"/>
+                <output expression="a[i] &amp; &quot; &quot;" newline="False"/>
             </for>
             <output expression="&quot; &quot;" newline="True"/>
         </body>

@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="Bisection Method"/>
+        <attribute name="authors" value="Roberto"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-11-16 09:05:23 PM"/>
+        <attribute name="created" value="Um9iZXJ0bzsgUk9CRVJUT19JNzsgMjAxNi0wNC0wMzsgMDk6MzU6MjcgOyAyNzIy"/>
+        <attribute name="edited" value="Um9iZXJ0bzsgUk9CRVJUT19JNzsgMjAxNi0wNC0wMzsgMTE6MDU6NDIgOyAyNzA5"/>
+        <attribute name="edited" value="bXJvbWFubztUSElOS1BBRC0yNzsyMDI1LTExLTE2OzA5OjA1OjIzIFBNOzI7Mjg5Ng=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="a" type="Integer" array="False" size=""/>
+            <declare name="b" type="Integer" array="False" size=""/>
+            <assign variable="a" expression="-200"/>
+            <assign variable="b" expression="300"/>
+            <call expression="bisection(a, b)"/>
+        </body>
+    </function>
+    <function name="bisection" type="None" variable="result">
+        <parameters>
+            <parameter name="a" type="Real" array="False"/>
+            <parameter name="b" type="Real" array="False"/>
+        </parameters>
+        <body>
+            <declare name="EPSILON" type="Real" array="False" size=""/>
+            <declare name="c" type="Real" array="False" size=""/>
+            <declare name="exit" type="Boolean" array="False" size=""/>
+            <assign variable="EPSILON" expression="0.01"/>
+            <assign variable="exit" expression="False"/>
+            <if expression="func(a) * func(b) &gt;= 0">
+                <then>
+                    <output expression="&quot;You have not assumed right a and b&quot;" newline="True"/>
+                </then>
+                <else>
+                    <assign variable="c" expression="a"/>
+                    <while expression="(b-a) &gt;= EPSILON AND exit = False">
+                        <comment text="Find middle point"/>
+                        <assign variable="c" expression="((a+b))/2"/>
+                        <comment text="Check if middle point is root"/>
+                        <if expression="func(c) = 0.0">
+                            <then>
+                                <assign variable="exit" expression="True"/>
+                            </then>
+                            <else>
+                                <if expression="func(c)*func(a) &lt; 0">
+                                    <then>
+                                        <assign variable="b" expression="c"/>
+                                    </then>
+                                    <else>
+                                        <assign variable="a" expression="c"/>
+                                    </else>
+                                </if>
+                            </else>
+                        </if>
+                    </while>
+                    <output expression="&quot;The value of root is : &quot; &amp; ToString(c)" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+    <function name="func" type="Real" variable="result">
+        <parameters>
+            <parameter name="x" type="Real" array="False"/>
+        </parameters>
+        <body>
+            <declare name="result" type="Integer" array="False" size=""/>
+            <assign variable="result" expression="x*x*x - x*x + 2"/>
+        </body>
+    </function>
+</flowgorithm>
