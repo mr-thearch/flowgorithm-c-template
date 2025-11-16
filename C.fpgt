@@ -1,0 +1,610 @@
+[Language]
+Name           = C
+Extension      = c
+
+; Elenco essenziale di parole chiave C (C99+)
+Keywords       = auto, break, case, char, const, continue, default, do, double
+               = else, enum, extern, float, for, goto, if, inline, int, long
+               = register, restrict, return, short, signed, sizeof, static, struct
+               = switch, typedef, union, unsigned, void, volatile, while, _Bool
+               = _Complex, _Imaginary, _Alignas, _Alignof, _Atomic, _Generic, _Noreturn
+               = _Static_assert, _Thread_local, bool, true, false
+
+; toInt / toReal / toString sono funzioni di supporto definite in fondo al programma
+Conflicts      = toInt, toReal, toString, inputReal, inputInt, inputBool, inputString
+Case Sensitive = true
+Options        =             
+
+; =======================================================
+; Tipi di Flowgorithm -> tipi C
+; =======================================================
+
+[Types]
+Integer      = int
+Real         = double
+Boolean      = bool
+String       = char* 
+
+[Function ID]
+Convention = camel
+Normal     = {Name}
+Conflict   = func_{Name}
+
+[Variable ID]
+Convention = camel
+Normal     = {Name}
+Conflict   = var_{Name}
+
+[String Literal]
+Text           = "{Characters}"
+Replace Char 1 = "
+Replace By 1   = \"
+Replace Char 2 = \
+Replace By 2   = \\
+
+[Boolean Literal]
+true     =  true
+false    =  false
+
+[Integer Literal]
+Text     = {Integral}
+
+[Real Literal]
+Text     = {Integral}.{Fractional}
+
+[Variable Access]
+Precedence = 100
+Text       = {Name}               | ~subscript
+           = {Name}[{Subscript}]  | subscript      
+
+; =======================================================
+; Espressioni (stessa gerarchia del template C++)
+; =======================================================
+
+[Or]
+Precedence   = 1
+Needed 1     = 1
+Needed 2     = 2
+Text         = {1} || {2}
+
+[And]
+Precedence   = 2
+Needed 1     = 2
+Needed 2     = 3
+Text         = {1} && {2}
+
+[Equals]
+Precedence   = 3               
+Needed 1     = 4 
+Needed 2     = 4 
+Text         = {1} == {2} 
+
+[Not Equals]
+Precedence   = 3               
+Needed 1     = 4 
+Needed 2     = 4 
+Text         = {1} != {2} 
+             
+[Less Than]
+Precedence   = 4            
+Needed 1     = 5
+Needed 2     = 5
+Text         = {1} < {2} 
+
+[Less Equal Than]
+Precedence   = 4            
+Needed 1     = 5
+Needed 2     = 5
+Text         = {1} <= {2} 
+
+[Greater Than]
+Precedence   = 4            
+Needed 1     = 5
+Needed 2     = 5
+Text         = {1} > {2} 
+
+[Greater Equal Than]
+Precedence   = 4            
+Needed 1     = 5
+Needed 2     = 5
+Text         = {1} >= {2} 
+
+; Per semplicità, si usa l’operatore + anche per le stringhe.
+; Se si vorrà una gestione più raffinata, qui si potrà introdurre
+; una funzione di concatenazione e un buffer di destinazione.
+
+[Concatenate]
+Precedence   = 5
+Needed 1     = 5 
+Needed 2     = 6
+Text         = stringConcat({1}, {2})
+
+[Add]
+Type         = real         | ~integer-integer
+             = integer      | integer-integer
+             
+Precedence   = 5
+Needed 1     = 5
+Needed 2     = 6
+Text         = {1} + {2}
+
+[Subtract]
+Type         = real         | ~integer-integer
+             = integer      | integer-integer
+
+Precedence   = 5
+Needed 1     = 5
+Needed 2     = 6
+Text         = {1} - {2}
+
+[Multiply]
+Type         = real         | ~integer-integer
+             = integer      | integer-integer
+
+Precedence   = 6
+Needed 1     = 6
+Needed 2     = 7
+Text         = {1} * {2}
+
+[Divide]
+Type         = real
+Precedence   = 6
+Needed 1     = 6            
+Needed 2     = 7
+Cast 1       = real         | integer-integer
+Text         = {1} / {2} 
+             
+[Modulus]
+Precedence   = 6
+Needed 1     = 6
+Needed 2     = 7
+Text         = {1} % {2}
+
+[Power]
+Type         = real
+Precedence   = 100
+Needed 1     = 0
+Needed 2     = 0
+Text         = pow({1}, {2})
+
+[Not]
+Type         = boolean
+Precedence   = 7
+Needed 1     = 7
+Text         = !{1}
+
+[Negate]
+Type         = real         | ~integer 
+             = integer      | integer 
+             
+Precedence   = 7
+Needed 1     = 7
+Text         = -{1}
+
+; =======================================================
+; Sotto-espressioni e cast
+; =======================================================
+
+[Subexpression]
+Precedence = 100
+Text       = ({Expression})
+
+[Cast]
+Precedence = 7      | real-to-integer
+           = 7      | integer-to-real
+           = 100 
+
+Needed     = 0      | string-to-integer
+           = 0      | string-to-real
+           = 100
+
+Text       = (int) {Expression}           | real-to-integer
+           = (double) {Expression}        | integer-to-real
+           = atoi({Expression})           | string-to-integer
+           = atof({Expression})           | string-to-real
+           = {Expression}                 | string-cast
+
+; =======================================================
+; Funzioni intrinseche principali (numeriche)
+; =======================================================
+
+[Abs]
+Precedence = 100
+Needed 1   = 0 
+Text       = fabs({1})
+
+[ArcCos]
+Precedence = 100
+Needed 1   = 0 
+Text       = acos({1})
+
+[ArcSin]
+Precedence = 100
+Needed 1   = 0 
+Text       = asin({1})
+
+[ArcTan]
+Precedence = 100
+Needed 1   = 0 
+Text       = atan({1})
+
+[Cos]
+Precedence = 100
+Needed 1   = 0 
+Text       = cos({1})
+
+[Int]
+Precedence = 100
+Needed 1   = 0 
+Text       = (int)({1})
+
+[Len]
+Precedence = 100
+Needed 1   = 100 
+Text       = strlen({1})
+
+[Log]
+Precedence = 100
+Needed 1   = 0 
+Text       = log({1})
+
+[Log10]
+Precedence = 100
+Needed 1   = 0 
+Text       = log10({1})
+
+[Pi]
+Precedence = 100
+Text       = 3.14159265358979323846
+
+[Random]
+Precedence = 100
+Needed 1   = 6 
+Text       = rand() % (int)({1})
+
+[Sin]
+Precedence = 100
+Needed 1   = 0 
+Text       = sin({1})
+
+[Sgn]
+Precedence = 100
+Needed 1   = 0 
+Text       = ({1} > 0 ? 1 : ({1} < 0 ? -1 : 0))
+
+[Size]
+Precedence = 100
+Needed 1   = 100 
+Text       = (sizeof({1}) / sizeof({1}[0]))
+
+[Sqrt]
+Precedence = 100
+Needed 1   = 0 
+Text       = sqrt({1})
+
+[Tan]
+Precedence = 100
+Needed 1   = 0 
+Text       = tan({1})
+
+[ToInteger]
+Precedence = 100
+Needed 1   = 0 
+Text       = toInt({1})
+
+[ToReal]
+Precedence = 100
+Needed 1   = 0 
+Text       = toReal({1})
+
+[ToString]
+Precedence = 100
+Needed 1   = 0 
+Text       = toString({1})
+
+; =======================================================
+; Chiamata di funzione
+; =======================================================
+
+[Function Call]
+Precedence = 100
+Text       = {name}({arguments}) 
+          
+[Argument]
+Separator  = ,{space}
+Text       = {expression}
+
+; =======================================================
+; Programma principale e funzioni di supporto
+; =======================================================
+
+[Program]
+Text      = // Flowgorithm non genera codice per turtle graphics in C.   | turtle
+          = // Flowgorithm non genera codice per file I/O in questo template. | files
+		  = #include <ctype.h>
+          = #include <stdio.h>
+          = #include <stdlib.h>
+          = #include <stdbool.h>
+          = #include <math.h>
+          = #include <string.h>
+		  = #include <errno.h>
+          = #include <time.h>                  | random
+          = 
+          = // Prototipi funzioni di conversione
+          = int toInt(const char* text);
+          = double toReal(const char* text);
+          = const char* toString(double value);
+          = 
+          = // Prototipi funzioni input helper
+          = double inputValue(void);
+          = char* inputString(void);
+		  = bool inputBool(void);
+          = char* stringConcat(const char* s1, const char* s2);
+          = -->HEADERS 
+		  =
+          = -->MAIN
+          = -->FUNCTIONS
+          = 
+          = // Implementazione funzioni di supporto
+          = 
+          = int toInt(const char* text) {{
+          =     return atoi(text);            | | 1
+          = }
+          = 
+          = double toReal(const char* text) {{
+          =     return atof(text);           | | 1
+          = }
+          = 
+          = const char* toString(double value) {{
+          =     static char buffer[64];      | | 1
+          =     snprintf(buffer, sizeof(buffer), "%g", value); | | 1
+          =     return buffer;               | | 1
+          = }
+          = 
+          = double inputValue(void) {{
+          =     char buffer[1024];                                      | | 1
+          =     for (;;) {{                                             | | 1
+          =         if (fgets(buffer, sizeof(buffer), stdin) == NULL) {{| | 2
+          =             return 0.0;                                     | | 3
+          =         }                                                   | | 2
+          =         size_t len = strlen(buffer);                        | | 2
+          =         if (len > 0 && buffer[len - 1] == '\n') {{          | | 2
+          =             buffer[len - 1] = '\0';                         | | 3
+          =         }                                                   | | 2
+          =         errno = 0;                                          | | 2
+          =         char* endptr;                                       | | 2
+          =         double value = strtod(buffer, &endptr);             | | 2
+          =         if (endptr != buffer && *endptr == '\0' && errno == 0) {{ | | 2
+          =             return value;                                   | | 3
+          =         }                                                   | | 2
+          =         fprintf(stderr, "Valore non valido. Inserire un numero.\n"); | | 2
+          =     }                                                       | | 1
+          = }
+          =		  
+		  = char* stringConcat(const char* s1, const char* s2) {{
+          =     size_t len1 = (s1 != NULL) ? strlen(s1) : 0;        | | 1
+          =     size_t len2 = (s2 != NULL) ? strlen(s2) : 0;        | | 1
+          =     char* result = (char*)malloc(len1 + len2 + 1);      | | 1
+          =     if (result == NULL) {{                              | | 1
+          =         fprintf(stderr, "Errore: memoria insufficiente in stringConcat.\n");    | | 2
+          =         exit(EXIT_FAILURE);                                                     | | 2 
+          =     }                                                   | | 1
+          =     if (s1 != NULL) {{                                  | | 1
+          =         memcpy(result, s1, len1);                       | | 2
+          =     }                                                   | | 1
+          =     if (s2 != NULL) {{                                  | | 1 
+          =         memcpy(result + len1, s2, len2);                | | 2
+          =     }                                                   | | 1
+          =     result[len1 + len2] = '\0';                         | | 1
+          =     return result;                                      | | 1
+          = }
+		  =
+		  = char* inputString(void) {{
+          =     char buffer[1024];                                      | | 1
+          =     if (fgets(buffer, sizeof(buffer), stdin) == NULL) {{    | | 1
+          =         char* empty = (char*)malloc(1);                     | | 2
+          =         if (empty == NULL) {{                               | | 2
+          =             fprintf(stderr, "Errore: memoria insufficiente in inputString.\n"); | | 3
+          =             exit(EXIT_FAILURE);                             | | 3
+          =         }                                                   | | 2
+          =         empty[0] = '\0';                                    | | 2
+          =         return empty;                                       | | 2
+          =     }                                                       | | 1
+          =     size_t len = strlen(buffer);                            | | 1
+          =     if (len > 0 && buffer[len - 1] == '\n') {{              | | 1
+          =         buffer[len - 1] = '\0';                             | | 2
+          =         len--;                                              | | 2
+          =     }                                                       | | 1
+          =     char* result = (char*)malloc(len + 1);                  | | 1
+          =     if (result == NULL) {{                                  | | 1
+          =         fprintf(stderr, "Errore: memoria insufficiente in inputString.\n"); | | 2
+          =         exit(EXIT_FAILURE);                                 | | 2
+          =     }                                                       | | 1
+          =     memcpy(result, buffer, len + 1);                        | | 1
+          =     return result;                                          | | 1
+          = }
+		  =
+		  = bool inputBool(void) {{
+          =     char buffer[32];                                      | | 1
+          =     for (;;) {{                                           | | 1
+          =         if (fgets(buffer, sizeof(buffer), stdin) == NULL) {{ | | 2
+          =             return false;                                 | | 3
+          =         }                                                 | | 2
+          =         size_t len = strlen(buffer);                      | | 2
+          =         if (len > 0 && buffer[len - 1] == '\n') {{        | | 2
+          =             buffer[len - 1] = '\0';                       | | 3
+          =             len--;                                        | | 3
+          =         }                                                 | | 2
+          =         int hasSpace = 0;                                 | | 2
+          =         for (size_t i = 0; i < len; i++) {{               | | 2
+          =             if (buffer[i] == ' ') {{                      | | 3
+          =                 hasSpace = 1;                             | | 4
+          =                 break;                                    | | 4
+          =             }                                             | | 3
+          =             if (buffer[i] == '\t') {{                     | | 3
+          =                 hasSpace = 1;                             | | 4
+          =                 break;                                    | | 4
+          =             }                                             | | 3
+          =         }                                                 | | 2
+          =         if (hasSpace) {{                                  | | 2
+          =             fprintf(stderr, "Valore booleano non valido. Inserire true o false.\n"); | | 3
+          =             continue;                                     | | 3
+          =         }                                                 | | 2
+          =         if (len == 4) {{                                  | | 2
+          =             int isTrue = 1;                               | | 3
+          =             if (buffer[0] != 't' && buffer[0] != 'T') isTrue = 0; | | 3
+          =             if (buffer[1] != 'r' && buffer[1] != 'R') isTrue = 0; | | 3
+          =             if (buffer[2] != 'u' && buffer[2] != 'U') isTrue = 0; | | 3
+          =             if (buffer[3] != 'e' && buffer[3] != 'E') isTrue = 0; | | 3
+          =             if (isTrue) {{                                 | | 3
+          =                 return true;                               | | 4
+          =             }                                              | | 3
+          =         }                                                 | | 2
+          =         if (len == 5) {{                                  | | 2
+          =             int isFalse = 1;                              | | 3
+          =             if (buffer[0] != 'f' && buffer[0] != 'F') isFalse = 0; | | 3
+          =             if (buffer[1] != 'a' && buffer[1] != 'A') isFalse = 0; | | 3
+          =             if (buffer[2] != 'l' && buffer[2] != 'L') isFalse = 0; | | 3
+          =             if (buffer[3] != 's' && buffer[3] != 'S') isFalse = 0; | | 3
+          =             if (buffer[4] != 'e' && buffer[4] != 'E') isFalse = 0; | | 3
+          =             if (isFalse) {{                                | | 3
+          =                 return false;                              | | 4
+          =             }                                              | | 3
+          =         }                                                 | | 2
+          =         fprintf(stderr, "Valore booleano non valido. Inserire true o false.\n"); | | 2
+          =     }                                                     | | 1
+          = }
+
+
+[Main]
+Text      = int main(void) {{
+          =     srand((unsigned int)time(NULL));   // Seed random   | random | 1
+          =     -->BLOCK                           | | 1
+          =     return 0;                          | | 1
+          = }
+
+; =======================================================
+; Funzioni definite dall’utente
+; =======================================================
+
+[Parameter]
+Separator = ,{space}
+Text      = {type} {name}             | ~array
+          = {type} {name}[]           | array
+
+[Function]
+Text      = 
+          = {type} {name}({parameters}) {{         | return      
+          = -->BLOCK                               | return | 1 
+          = return {return};                       | return | 1
+          = }                                      | return
+          = 
+          = void {name}({parameters}) {{           | ~return      
+          = -->BLOCK                               | ~return | 1 
+          = }                                      | ~return
+		  
+[Function Header]
+Text     = {type} {name}({parameters});                 | return    
+          = void {name}({parameters});                  | ~return 		  
+
+; =======================================================
+; Istruzioni
+; =======================================================
+
+[Assign]         
+Text       = {Variable} = {Expression};            
+            
+[Call]
+Text       = {Name}({Arguments});      
+
+[Comment]
+Text       = /* {Text} */
+
+[Declare Name]      
+Separator  = ,{space}
+Text       = {name}                        | ~array   
+           = {name}[{Size}]                | array
+           
+[Declare]
+Text       = {Type} {Variables};   
+
+[Do]
+Text       = do {{
+           = -->BLOCK                                | | 1    
+           = }} while ({condition});
+
+[For]
+Text       = for ({Variable} = {Start}; {Variable} <= {End}; {Variable}++) {{           | inc, ~step
+           = for ({Variable} = {Start}; {Variable} <= {End}; {Variable} += {step}) {{   | inc, step
+           = for ({Variable} = {Start}; {Variable} >= {End}; {Variable}--) {{           | ~inc, ~step
+           = for ({Variable} = {Start}; {Variable} >= {End}; {Variable} -= {step}) {{   | ~inc, step
+           = -->BLOCK                                                          |        | 1
+           = }
+
+; Input tipizzato usando helper o scanf diretta.
+; Se vuoi eliminare le funzioni inputReal/inputInt/..., puoi sostituire le righe con scanf.
+
+[Input]
+Text       = {Variable} = inputValue();           | real
+           = {Variable} = (int) inputValue();     | integer
+           = {Variable} = inputBool();            | boolean
+           = {Variable} = inputString();          | string
+           = {Variable} = inputValue();           | none
+
+[If]
+Text       = if ({condition}) {{
+           = -->TRUEBLOCK                         |      | 1
+           = } else {{                            | else 
+           = -->FALSEBLOCK                        | else | 1
+           = }
+
+; Output semplificato: una sola espressione per volta.
+; Per output complessi con più espressioni si può estendere con una [Output List]
+; ad hoc. Per molti usi numerici questa forma è sufficiente.
+
+[Output]
+Text       = printf("%g\n", (double)({Expression}));      | newline, real
+           = printf("%d\n", (int)({Expression}));         | newline, integer
+           = printf("%s\n", {Expression});                | newline, string
+           = printf("%s\n", ({Expression} ? "true" : "false")); | newline, boolean
+           = printf("%g", (double)({Expression}));        | ~newline, real
+           = printf("%d", (int)({Expression}));           | ~newline, integer
+           = printf("%s", {Expression});                  | ~newline, string
+           = printf("%s", ({Expression} ? "true" : "false"));   | ~newline, boolean
+
+[While]
+Text       = while ({condition}) {{
+           = -->BLOCK                            | | 1
+           = }
+
+; Le sezioni per turtle e file I/O vengono mappate a commenti vuoti
+
+[Turn]
+Text      = /* Turn Left {Expression} */        | left   
+          = /* Turn Right {Expression} */       | right  
+
+[Forward]
+Text      = /* Move {Expression} */             | up
+          = /* Draw {Expression} */             | down  
+
+[Home]
+Text      = /* Home */
+
+[Clear]
+Text      = /* Clear screen */
+
+[Open]
+Text      = /* Open {Expression} (not implemented) */    | read
+          = /* Open {Expression} (not implemented) */    | write
+
+[Read]
+Text      = /* Read {Variable} (not implemented) */
+
+[Write]
+Text      = /* Write {Expression} (not implemented) */
+
+[Close]
+Text      = /* Close Read/Write (not implemented) */
+
+[Pen]
+Text      = /* Color {Color} */

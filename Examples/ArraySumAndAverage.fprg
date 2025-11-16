@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="ArraySumAndAverage"/>
+        <attribute name="authors" value="mromano"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2025-11-16 02:08:42 PM"/>
+        <attribute name="created" value="bXJvbWFubztUSElOS1BBRC0yNzsyMDI1LTExLTE2OzAxOjUyOjUyIFBNOzI3ODM="/>
+        <attribute name="edited" value="bXJvbWFubztUSElOS1BBRC0yNzsyMDI1LTExLTE2OzAyOjA4OjQyIFBNOzM7Mjg5NA=="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <comment text="Variables declaration"/>
+            <declare name="i" type="Integer" array="False" size=""/>
+            <declare name="n" type="Integer" array="False" size=""/>
+            <declare name="sum" type="Real" array="False" size=""/>
+            <declare name="average" type="Real" array="False" size=""/>
+            <comment text="Get vector dimension"/>
+            <output expression="&quot;Get the number of the element of the array&quot;" newline="True"/>
+            <input variable="n"/>
+            <declare name="vector" type="Integer" array="True" size="n"/>
+            <comment text="Get array items"/>
+            <for variable="i" start="0" end="n-1" direction="inc" step="1">
+                <output expression="&quot;Insert item at position &quot; &amp; ToString(i)" newline="True"/>
+                <input variable="vector[i]"/>
+            </for>
+            <comment text="Compute sum and average"/>
+            <assign variable="sum" expression="0.0"/>
+            <for variable="i" start="0" end="n-1" direction="inc" step="1">
+                <assign variable="sum" expression="sum + vector[i]"/>
+            </for>
+            <assign variable="average" expression="sum / n"/>
+            <comment text="Output results"/>
+            <output expression="&quot;The vector items sum is &quot; &amp; ToString(sum)" newline="True"/>
+            <output expression="&quot;The average is &quot; &amp; ToString(average)" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>
